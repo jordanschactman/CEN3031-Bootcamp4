@@ -3,6 +3,8 @@ import React from 'react';
 class Search extends React.Component {
 	filterUpdate() {
 		// here you will need to update the value of the filter with the value from the textbox
+		const val = this.filterValue.value;
+		this.props.filterUpdate(val);
 	}
 
 	render() {
@@ -11,7 +13,12 @@ class Search extends React.Component {
 
 		return (
 			<form>
-				<input type="text" placeholder="Type to Filter" />
+				<input
+					type="text"
+					ref={ (value) => { this.filterValue = value } }
+					placeholder="Type to Filter"
+					onChange={this.filterUpdate.bind(this)}
+				/>
 			</form>
 		);
 	}
