@@ -44,7 +44,8 @@ class App extends React.Component {
         return 1;
       }
       return 0;
-    }).forEach((building, i) => {
+    })
+    .forEach((building, i) => {
       building.id = i + 1;
     });
 
@@ -77,9 +78,9 @@ class App extends React.Component {
   render() {
     return(
       <div className="bg">
-        <div className="row">
-          <h1>UF Directory App</h1>
-        </div>
+        <nav className="navbar navbar-dark bg-dark">
+          <a className="navbar-brand" href="#">UF Directory App</a>
+        </nav>
         <Search
           filterText={this.state.filterText}
           filterUpdate={this.filterUpdate}
@@ -87,22 +88,28 @@ class App extends React.Component {
         <main>
           <div className="row">
             <div className="column1">
-              <button
-                type="button"
-                className="btn btn-primary"
-                data-toggle="modal"
-                data-target="#addBuildingModal"
-              >
-                Add Building
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                data-toggle="modal"
-                data-target="#removeBuildingModal"
-              >
-					      Remove Building
-				      </button>
+              <div className="row">
+                <div className="col-2">
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    data-toggle="modal"
+                    data-target="#addBuildingModal"
+                  >
+                    Add Building
+                  </button>
+                </div>
+                <div className="col-2">
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    data-toggle="modal"
+                    data-target="#removeBuildingModal"
+                  >
+                    Remove Building
+                  </button>
+                </div>
+              </div>
               <AddBuilding
                 buildings={this.state.buildings}
                 addBuilding={this.addBuilding}
@@ -131,6 +138,7 @@ class App extends React.Component {
               <ViewBuilding
                 buildings={this.state.buildings}
                 selectedBuilding={this.state.selectedBuilding}
+                selectedUpdate={this.selectedUpdate}
               />
             </div>
           </div>
