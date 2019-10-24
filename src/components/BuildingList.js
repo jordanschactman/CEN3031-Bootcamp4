@@ -10,7 +10,7 @@ class BuildingList extends React.Component {
 		const { buildings, filterText } = this.props;
 
 		const buildingList = buildings.filter(building => {
-			return (building.name.toLowerCase().indexOf(filterText.toLowerCase()) >= 0) || (building.code.toLowerCase().indexOf(filterText.toLowerCase()) >= 0);
+			return (building.name.toLowerCase().indexOf(filterText.toLowerCase()) >= 0) || (building.code.indexOf(filterText.toUpperCase()) >= 0);
 		})
 		.map((directory, i) => {
 			return (

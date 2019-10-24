@@ -105,3 +105,9 @@ button {
 button:hover {
   background: #ddd;
 }
+
+/* Add red asterisk after required field labels */
+.required-field:after {
+  content:"*";
+  color:red;
+}

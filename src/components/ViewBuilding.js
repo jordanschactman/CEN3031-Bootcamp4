@@ -23,8 +23,8 @@ class ViewBuilding extends React.Component {
 				<div key={building.id}>
 					<span>Code: {building.code}</span><br />
 					<span>Name: {building.name}</span><br />
-					{hasAddress && <span>Address: {building.address}</span>}<br />
-					{hasCoordinates && <span>Coordinates: {building.coordinates.latitude}, {building.coordinates.longitude}</span>}
+					{hasAddress && <React.Fragment><span>Address: {building.address}</span><br /></React.Fragment>}
+					{hasCoordinates && <React.Fragment><span>Coordinates: {building.coordinates.latitude}, {building.coordinates.longitude}</span></React.Fragment>}
 				</div>
 			);
 		});

@@ -3,7 +3,10 @@ import React from 'react';
 class RemoveBuilding extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { code: '' };
+		this.state = {
+			code: '',
+			error: false
+		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.closeButtonRef = React.createRef();
@@ -11,9 +14,26 @@ class RemoveBuilding extends React.Component {
 
 	handleSubmit(event) {
 		event.preventDefault();
-		this.props.removeBuilding(this.state.code);
-		this.closeButtonRef.current.click();
-		event.target.reset();
+
+		const code = this.state.code.toUpperCase();
+
+		const exists = this.props.buildings.find((building, i) => {
+			if (building === undefined) {
+				console.log('undefined at: ' + i);
+				return 0;
+			}
+			return building.code === code;
+		});
+
+		if (exists) {
+			this.props.removeBuilding(code);
+			this.closeButtonRef.current.click();
+			this.setState({ error: false });
+			event.target.reset();
+		}
+		else {
+			this.setState({ error: true });
+		}
 	}
 
 	handleChange(event) {
@@ -50,12 +70,19 @@ class RemoveBuilding extends React.Component {
 							</button>
 						</div>
 						<div className="modal-body">
-							<p>Modal body text goes here.</p>
+							{this.state.error &&
+								<div
+									className="alert alert-danger"
+									role="alert"
+								>
+									No building with this code exists!
+								</div>
+							}
 							<form onSubmit={this.handleSubmit}>
 								<div className="form-group">
 									<label
 										htmlFor="building-code"
-										className="col-form-label"
+										className="col-form-label required-field"
 									>
 										Code:
 									</label>

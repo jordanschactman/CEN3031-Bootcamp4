@@ -14,6 +14,10 @@ class App extends React.Component {
       selectedBuilding: 0,
       buildings: this.props.data
     };
+    this.filterUpdate = this.filterUpdate.bind(this);
+    this.selectedUpdate = this.selectedUpdate.bind(this);
+    this.addBuilding = this.addBuilding.bind(this);
+    this.removeBuilding = this.removeBuilding.bind(this);
   }
 
   filterUpdate(value) {
@@ -25,47 +29,48 @@ class App extends React.Component {
   }
 
   addBuilding(code, name, address, coordinates) {
-    let id = Math.max.apply(Math, this.state.buildings.map(function(building) {
-      return building.id;
-    })) + 1;
-    const newBuildings = this.state.buildings.concat([{
-      id: id,
+    var newBuildings = this.state.buildings.concat({
       code: code,
       name: name,
       address: address,
-      coordinates: {
-        latitude: coordinates,
-        longitude: coordinates
+      coordinates: coordinates
+    });
+
+    newBuildings.sort((a, b) => {
+      if (a.code < b.code) {
+        return -1;
       }
-    }]);
+      if (a.code > b.code) {
+        return 1;
+      }
+      return 0;
+    }).forEach((building, i) => {
+      building.id = i + 1;
+    });
+
     this.setState({ buildings: newBuildings });
   }
 
   removeBuilding(code) {
-    const { buildings } = this.state;
-
-    var newBuildings = [];
-
-    buildings.forEach(function(building, i) {
-      if (building.code.toLowerCase() !== code.toLowerCase()) {
-        var newBuilding = {
-          id: i + 1,
-          code: building.code,
-          name: building.name
-        };
-        
-        if (building.address) {
-          newBuilding.address = building.address;
-        }
-        
-        if (building.coordinates) {
-          newBuilding.coordinates = building.coordinates;
-        }
-        
-        newBuildings[i] = newBuilding;
-      }
+    const index = this.state.buildings.findIndex(building => {
+      return building.code === code;
     });
-    
+
+    // check if 'selectedBuilding' is the same as the building being removed
+    // if so, change 'selectedBuilding' to 0 to stop viewing building information
+    if (this.state.selectedBuilding === index + 1) {
+      this.setState({ selectedBuilding: 0 });
+    }
+
+    const newBuildings = [
+      ...this.state.buildings.slice(0, index),
+      ...this.state.buildings.slice(index + 1)
+    ];
+
+    newBuildings.forEach((building, i) => {
+      building.id = i + 1;
+    });
+
     this.setState({ buildings: newBuildings });
   }
 
@@ -77,7 +82,7 @@ class App extends React.Component {
         </div>
         <Search
           filterText={this.state.filterText}
-          filterUpdate={this.filterUpdate.bind(this)}
+          filterUpdate={this.filterUpdate}
         />
         <main>
           <div className="row">
@@ -99,10 +104,12 @@ class App extends React.Component {
 					      Remove Building
 				      </button>
               <AddBuilding
-                addBuilding={this.addBuilding.bind(this)}
+                buildings={this.state.buildings}
+                addBuilding={this.addBuilding}
               />
               <RemoveBuilding
-                removeBuilding={this.removeBuilding.bind(this)}
+                buildings={this.state.buildings}
+                removeBuilding={this.removeBuilding}
               />
               <div className="tableWrapper">
                 <table className="table table-hover">
@@ -115,7 +122,7 @@ class App extends React.Component {
                   <BuildingList
                     buildings={this.state.buildings}
                     filterText={this.state.filterText}
-                    selectedUpdate={this.selectedUpdate.bind(this)}
+                    selectedUpdate={this.selectedUpdate}
                   />
                 </table>
               </div>

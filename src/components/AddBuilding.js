@@ -7,7 +7,8 @@ class AddBuilding extends React.Component {
 			code: '',
 			name: '',
 			address: '',
-			coordinates: ''
+			coordinates: '',
+			error: false
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -16,9 +17,23 @@ class AddBuilding extends React.Component {
 
 	handleSubmit(event) {
 		event.preventDefault();
-		this.props.addBuilding(this.state.code, this.state.name, this.state.address, this.state.coordinates);
-		this.closeButtonRef.current.click();
-		event.target.reset();
+
+		const code = this.state.code.toUpperCase();
+		const { name, address, coordinates } = this.state;
+
+		const exists = this.props.buildings.find(building => {
+			return (building.code === code || building.name === name);
+		});
+
+		if (!exists) {
+			this.props.addBuilding(code, name, address, coordinates);
+			this.closeButtonRef.current.click();
+			this.setState({ error: false });
+			event.target.reset();
+		}
+		else {
+			this.setState({ error: true });
+		}
 	}
 
 	handleChange(event) {
@@ -60,11 +75,19 @@ class AddBuilding extends React.Component {
 							</button>
 						</div>
 						<div className="modal-body">
+							{this.state.error &&
+								<div
+									className="alert alert-danger"
+									role="alert"
+								>
+									A building with this code or name already exists!
+								</div>	
+							}
 							<form onSubmit={this.handleSubmit}>
 								<div className="form-group">
 									<label
 										htmlFor="building-code"
-										className="col-form-label"
+										className="col-form-label required-field"
 									>
 										Code:
 									</label>
@@ -75,12 +98,19 @@ class AddBuilding extends React.Component {
 										name="code"
 										onChange={this.handleChange}
 										required
+										pattern="[a-zA-Z]{3}|[a-zA-Z]{4}"
 									></input>
+									<small
+										id="codeHelpBlock"
+										className="form-text text-muted"
+									>
+										Building codes should be 3-4 characters.
+									</small>
 								</div>
 								<div className="form-group">
 									<label
 										htmlFor="building-name"
-										className="col-form-label"
+										className="col-form-label required-field"
 									>
 										Name:
 									</label>
