@@ -1,4 +1,5 @@
 import React from 'react';
+import Building from './Building';
 
 class BuildingList extends React.Component {
 	selectedUpdate(id) {
@@ -6,24 +7,20 @@ class BuildingList extends React.Component {
 	}
 
 	render() {
-		const { data, filterText } = this.props;
+		const { buildings, filterText } = this.props;
 
-		const buildingList = data.filter(building => {
-			return (building.name.toLowerCase().indexOf(filterText.toLowerCase()) >= 0) || (building.code.toLowerCase().indexOf(filterText.toLowerCase()) >= 0)
-		})	
-		.map(directory => {
+		const buildingList = buildings.filter(building => {
+			return (building.name.toLowerCase().indexOf(filterText.toLowerCase()) >= 0) || (building.code.toLowerCase().indexOf(filterText.toLowerCase()) >= 0);
+		})
+		.map((directory, i) => {
 			return (
-				<tr
-					key={directory.id}
-					onClick={() => this.selectedUpdate(directory.id)}
-				>
-					<td>
-						{directory.code}
-					</td>
-					<td>
-						{directory.name}
-					</td>
-				</tr>
+				<Building
+					key={i}
+					id={directory.id}
+					code={directory.code}
+					name={directory.name}
+					handleSelectedUpdate={(id) => this.selectedUpdate(id)}
+				/>
 			);
 		});
 

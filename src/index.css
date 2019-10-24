@@ -18,7 +18,7 @@ header {
   margin-bottom: 2rem;
 }
 
-input[type='text'] {
+input.searchbar {
   margin: 1rem;
   background: #fff;
   font-size: 1.3rem;
@@ -31,6 +31,7 @@ input[type='text'] {
 }
 
 /* ##### NamesList ##### */
+/*
 tr {
   padding: 0;
 }
@@ -45,6 +46,10 @@ td:hover {
   position: left;
   cursor: pointer;
   background-color: #ddd;
+}
+*/
+td:hover {
+  cursor: pointer;
 }
 
 /* ##### Columns ##### */

@@ -2,18 +2,29 @@ import React from 'react';
 
 class ViewBuilding extends React.Component {
 	render() {
-		const { data, selectedBuilding } = this.props;
+		const { buildings, selectedBuilding } = this.props;
 
-		const buildingInfo = data.filter(directory => {
-			return directory.id === selectedBuilding;
+		const buildingInfo = buildings.filter(building => {
+			return building.id === selectedBuilding;
 		})
-		.map(directory => {
+		.map(building => {
+			var hasAddress = false;
+			var hasCoordinates = false;
+
+			if (building.address && (building.address !== '')) {
+				hasAddress = true;
+			}
+
+			if (building.coordinates && building.coordinates.latitude !== '' && building.coordinates.longitude !== '') {
+				hasCoordinates = true;
+			}
+
 			return (
-				<div key={directory.id}>
-					<span>Code: {directory.code}</span><br />
-					<span>Building: {directory.name}</span><br />
-					{directory.address && <span>Address: {directory.address}</span>}<br />
-					{directory.coordinates && <span>Coordinates: {directory.coordinates.latitude}, {directory.coordinates.longitude}</span>}
+				<div key={building.id}>
+					<span>Code: {building.code}</span><br />
+					<span>Name: {building.name}</span><br />
+					{hasAddress && <span>Address: {building.address}</span>}<br />
+					{hasCoordinates && <span>Coordinates: {building.coordinates.latitude}, {building.coordinates.longitude}</span>}
 				</div>
 			);
 		});
