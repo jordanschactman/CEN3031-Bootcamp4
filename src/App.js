@@ -79,7 +79,7 @@ class App extends React.Component {
     return(
       <div className="bg">
         <nav className="navbar navbar-dark bg-dark">
-          <a className="navbar-brand" href="#">UF Directory App</a>
+          <a className="navbar-brand" href="/">UF Directory App</a>
         </nav>
         <Search
           filterText={this.state.filterText}
